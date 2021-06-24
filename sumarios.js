@@ -38,7 +38,7 @@ const calcE = (K, R) => {
   return e;
 };
 
-let result = 0;
+/*let result = 0;
 if (N <= 11) {
   result = calcE(N-1,1) + calcE(N-2,2);
 } else {
@@ -46,4 +46,5 @@ if (N <= 11) {
     result += calcE(i, N-i);
   }
 }
-console.log('R', result);
+console.log('R', result);*/
+calcE(4,1);
