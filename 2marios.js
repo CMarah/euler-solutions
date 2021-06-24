@@ -1,4 +1,4 @@
-const N = 0;
+const N = 7;
 const BASE = 10;
 
 const digits = n => {
@@ -60,37 +60,47 @@ const binom = (n, k) => {
   return result;
 };
 
+const A2 = (n, m) => {
+  if (m === 9) return binom(n,m) - 1;
+  if (n === m && n < 9) return 1;
+  if (n === m && n >= 9) return 0;
+  if (m < 9) return binom(n, m);
+  return A2(n-1,m-1) + A2(n-1,m) - A2(n-11,m-10);
+}
+
 const E = (k, r) => {
   if (r === 1) return binom(7 + r + k, k);
   if (r === 2) {
     let result = 0;
-    let a = A(8 + k, 9);
+    //let a = A2(10 + 8 + k, 9 + 9);
+    let a = A2(10 + 8 + k, 18) - A2(k + 8 - 1, 8);
     let i = 0;
     while (a > 0) {
       console.log('a is', a);
       result += a;
-      ++i;
-      a = A(8 + k + i, 9 + i);
+      i = i + 9;
+      //a = A2(8 + k + i, 9 + i);
+      a = A2(10 + 8 + k + i, 18 + i) - A2(k + 8 + i - 1, 8 + i);
     }
     return result;
   }
   return 0;
 };
-//console.log('E', E(3,2));
+console.log('E', E(3,2));
+const n = 3;
+const m = 2;
+//console.log('a', A2(10 + 3 + 8, 18) - A2(2 + 8, 8));
+//console.log('b', A2(10 + 3 + 8, 18), A2(2+8,8));
+console.log('c', A2(29,26) - A2(18,16));
+console.log('d', A2(29,26), A2(28,26), A2(20,18));
 
 console.log('------------------');
 //console.log('Es', calcE(5, 2), E(4,2));
 
 /*let res = 0;
-if (N > 114 && N <= 11) {
-  res = calcE(N-1,1) + calcE(N-2,2);
-} else {
-  for (i = 1; i <= N; ++i) {
-    const e = E(i, N-i);
-    console.log(`Step ${i}: `, e);
-    res += e;
-  }
+for (i = 1; i <= N; ++i) {
+  const e = E(i, N-i);
+  console.log(`Step ${i}: `, e);
+  res += e;
 }
 console.log('Res', res);*/
-
-console.log(A(21,19));
