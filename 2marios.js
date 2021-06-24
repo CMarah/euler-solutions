@@ -1,4 +1,3 @@
-const N = 7;
 const BASE = 10;
 
 const digits = n => {
@@ -72,21 +71,28 @@ const E = (k, r) => {
   if (r === 1) return binom(7 + r + k, k);
   if (r === 2) {
     let result = 0;
-    //let a = A2(10 + 8 + k, 9 + 9);
-    let a = A2(10 + 8 + k, 18) - A2(k + 8 - 1, 8);
+    let a = A2(8 + k, 9);
+    //let a = A2(10 + 8 + k, 18) - A2(k + 8 - 1, 8);
     let i = 0;
+    let w = 0;
     while (a > 0) {
       console.log('a is', a);
       result += a;
-      i = i + 9;
-      //a = A2(8 + k + i, 9 + i);
-      a = A2(10 + 8 + k + i, 18 + i) - A2(k + 8 + i - 1, 8 + i);
+      i = i + 1;
+      a = A2(8 + k + i, 9 + i);
+
+      w += a;
+      if (i%9 === 0) {
+        console.log('K', w);
+        w = 0;
+      }
+      //a = A2(10 + 8 + k + i, 18 + i) - A2(k + 8 + i - 1, 8 + i);
     }
     return result;
   }
   return 0;
 };
-console.log('E', E(3,2));
+console.log('E', E(4,2));
 const n = 3;
 const m = 2;
 //console.log('a', A2(10 + 3 + 8, 18) - A2(2 + 8, 8));
@@ -97,10 +103,11 @@ console.log('d', A2(29,26), A2(28,26), A2(20,18));
 console.log('------------------');
 //console.log('Es', calcE(5, 2), E(4,2));
 
-/*let res = 0;
+const N = 8;
+let res = 0;
 for (i = 1; i <= N; ++i) {
   const e = E(i, N-i);
   console.log(`Step ${i}: `, e);
   res += e;
 }
-console.log('Res', res);*/
+console.log('Res', res);
