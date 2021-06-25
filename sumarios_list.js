@@ -1,5 +1,5 @@
 const N = 8;
-const L = N*3;
+const L = N*4;
 
 const printMatrix = matrix => matrix.forEach(
   r => console.log(r
@@ -16,7 +16,7 @@ const buildMatrix = () => {
   for (let j = 0; j < L; ++j) {
     for (let i = 0; i < N; ++i) {
       if (i === 0) {
-        matrix[j] = (j >= 9) ? [0] : [1];
+        matrix[j] = (j >= 9) ? [1] : [1];
       } else {
         matrix[j][i] = 0;
         for (let k = 0; k < 10 && j-k >= 0; ++k) {
@@ -26,7 +26,8 @@ const buildMatrix = () => {
   return matrix;
 }
 
-printMatrix(buildMatrix());
+const MATRIX = buildMatrix();
+printMatrix(MATRIX);
 
 const binom = (n, k) => {
   if (n < 0 || k < 0) return 0;
@@ -43,7 +44,34 @@ const binom = (n, k) => {
   return result;
 };
 
+const B = (n, m) => {
+  if (n < 0 || m < 0) return 0;
+  if (m === 0) return 1;
+  if (n === 0) return 1;
+  if (n < 9) return binom(n+m,m);
+  if (n < 18) {
+    const a = binom(n+m, m);
+    const c = (n - 9)*B(n-9, m-1);
+    return a - c;
+  }
+  if (n < 27) {
+    const a = binom(n+m, m);
+    const c = (n - 9)*B(n-9, m-1);
+    const d = ((n-18)*(n-9) - binom(n-18,2))*B(n-18, m-2);
+    return a - c - d;
+  }
+  return B(n,m-1) + B(n-1,m) - B(n-10,m-1);
+}
+
+const A2 = (n, m) => {
+  if (n < 9) return binom(n+m, m);
+  return Math.max(B(n,m) - binom(n+m-9, m), 0);
+}
+
+
+let asd = 0;
 const A = (n, m) => {
+  //return A2(n,m);
   if (n < 0 || m < 0) return 0;
   if (m === 0) {
     if (n < 9) return 1;
@@ -51,9 +79,23 @@ const A = (n, m) => {
   }
   if (n === 0) return 1;
   if (n < 9) return binom(n+m,m);
+  if (n < 18) {
+    const a = binom(n+m, m);
+    const b = binom(n+m-9,m);
+    const c = (n - 9)*A(n-9, m-1);
+    return a - b - c;
+  }
+  if (n < 27) {
+    const a = binom(n+m, m);
+    const b = binom(n+m-9, m);
+    const c = (n - 9)*A(n-9, m-1);
+    const d = A(n-18, m-2);
+    //console.log('F', a - b - c, d);
+    //if (asd === 0) asd = a - b - c;
+  }
   return A(n,m-1) + A(n-1,m) - A(n-10,m-1);
 }
-console.log(A(15, 6));
+console.log(A(19,4), A2(19,4));
 
 const E = (k, r) => {
   if (r === 1) return A(8,k);
@@ -61,7 +103,7 @@ const E = (k, r) => {
     let result = 0;
     let i = 0;
     let a = A(17, k) - A(8,k-1);
-    while (a > 0 && i < 20) {
+    while (a > 0) {
       console.log('a is', a, A(17+i,k), A(8+i,k-1));
       result += a;
       i = i + 9;
